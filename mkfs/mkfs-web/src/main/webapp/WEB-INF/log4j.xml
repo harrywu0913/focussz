@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd"> 
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- [公共Appender] 默认 -->
+	<appender name="DEFAULT-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/app/mkfs/logs/common-default.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="BIZ-DEFAULT-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/app/mkfs/logs/biz-default.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="SQL-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/app/mkfs/logs/sql-default.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="SPRING-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/app/mkfs/logs/spring-default.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- [公共Appender] 汇总错误 -->
+	<appender name="ERROR-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/app/mkfs/logs/common-error.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<param name="threshold" value="error" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="WEB-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/app/mkfs/logs/mys-web-default.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.mkfs.web" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="WEB-APPENDER" />
+		<appender-ref ref="ERROR-APPENDER" />
+	</logger>
+
+	<logger name="sql-log" additivity="true">
+		<level value="INFO" />
+		<appender-ref ref="SQL-APPENDER" />
+	</logger>
+	
+	<logger name="com.ibatis" additivity="true">
+	   <level value="DEBUG" />
+	   <appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="java.sql.Connection" additivity="true">
+	   <level value="DEBUG" />
+	   <appender-ref ref="SQL-APPENDER" />
+	</logger>
+	<logger name="java.sql.Statement" additivity="true">
+	   <level value="DEBUG" />
+	   <appender-ref ref="SQL-APPENDER" />
+	</logger>
+	<logger name="java.sql.PreparedStatement" additivity="true">
+	   <level value="DEBUG" />
+	   <appender-ref ref="SQL-APPENDER" />
+	</logger>
+	<logger name="java.sql.ResultSet" additivity="true">
+	   <level value="DEBUG" />
+	   <appender-ref ref="SQL-APPENDER" />
+	</logger>
+
+	<logger name="org.springframework" additivity="true">
+		<level value="error" />
+		<appender-ref ref="SPRING-APPENDER" />
+		<appender-ref ref="ERROR-APPENDER" />
+	</logger>
+
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="DEFAULT-APPENDER" />
+		<appender-ref ref="ERROR-APPENDER" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</log4j:configuration>
