@@ -12,7 +12,6 @@ public class AuthenticationDefinitionRegistry implements BeanDefinitionRegistry 
     @Override
     public void registerBean(String beanName, AuthenticationDefinition beanDefinition) {
         assetNotNull(beanName, "beanName");
-
         assetNotNull(beanDefinition, "beanDefinition");
         beanDefinitions.put(beanName, beanDefinition);
     }
