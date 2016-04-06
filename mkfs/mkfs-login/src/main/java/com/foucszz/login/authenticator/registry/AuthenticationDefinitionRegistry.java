@@ -2,30 +2,60 @@ package com.foucszz.login.authenticator.registry;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 import com.focuszz.login.authenticator.config.AuthenticationDefinition;
 
 public class AuthenticationDefinitionRegistry implements BeanDefinitionRegistry {
 
-    private Map<String, AuthenticationDefinition> beanDefinitions = new ConcurrentHashMap<String, AuthenticationDefinition>();
+    private final Map<String, AuthenticationDefinition> beanDefinitions        = new ConcurrentHashMap<String, AuthenticationDefinition>();
 
-    @Override
-    public void registerBean(String beanName, AuthenticationDefinition beanDefinition) {
-        assetNotNull(beanName, "beanName");
-        assetNotNull(beanDefinition, "beanDefinition");
-        beanDefinitions.put(beanName, beanDefinition);
-    }
-
-    @Override
-    public void removeBean(String beanName) {
-        assetNotNull(beanName, "beanName");
-        beanDefinitions.remove(beanName);
-    }
+    private final Map<String, AuthenticationDefinition> patternBeanDefinitions = new ConcurrentHashMap<String, AuthenticationDefinition>();
 
     @Override
     public AuthenticationDefinition getBean(String beanName) {
         assetNotNull(beanName, "beanName");
-        return beanDefinitions.get(beanName);
+        AuthenticationDefinition beanDefinition = beanDefinitions.get(beanName);
+        if (beanDefinition == null) {
+            for (String bName : patternBeanDefinitions.keySet()) {
+                if (Pattern.matches(bName, beanName)) {
+                    return patternBeanDefinitions.get(bName);
+                }
+            }
+        }
+        return beanDefinition;
+    }
+
+    @Override
+    public void registerBean(String beanName, AuthenticationDefinition beanDefinition) {
+        this.registerBean(beanName, beanDefinition, false);
+    }
+
+    @Override
+    public void removeBean(String beanName) {
+        this.removeBean(beanName, false);
+    }
+
+    @Override
+    public void registerBean(String beanName, AuthenticationDefinition beanDefinition,
+                             boolean pattern) {
+        assetNotNull(beanName, "beanName");
+        assetNotNull(beanDefinition, "beanDefinition");
+        if (pattern) {
+            patternBeanDefinitions.put(beanName, beanDefinition);
+        } else {
+            beanDefinitions.put(beanName, beanDefinition);
+        }
+    }
+
+    @Override
+    public void removeBean(String beanName, boolean pattern) {
+        assetNotNull(beanName, "beanName");
+        if (pattern) {
+            patternBeanDefinitions.remove(beanName);
+        } else {
+            beanDefinitions.remove(beanName);
+        }
     }
 
     private void assetNotNull(Object obj, String paramName) {
