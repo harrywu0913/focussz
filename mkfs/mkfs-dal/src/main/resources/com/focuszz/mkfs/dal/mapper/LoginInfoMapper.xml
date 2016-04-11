@@ -11,7 +11,7 @@
 		<result property="lastLoginTime" column="last_login_time" />
 		<result property="createId" column="create_id" />
 		<result property="createTime" column="create_time" />
-		<result property="lastUpdateTime" column="update_time" />
+		<result property="updateTime" column="update_time" />
 		<result property="updateId" column="update_id" />
 	</resultMap>
 
@@ -34,7 +34,7 @@
 			#{createId},
 			#{createTime},
 			#{updateId},
-			#{lastUpdateTime}
+			#{updateTime}
 		)
 	</insert>
 				
@@ -42,7 +42,7 @@
 		SELECT
 			id,
 			user_id,
-			mobile_phone,
+			login_account,
 			password,
 			create_id,
 			create_time,

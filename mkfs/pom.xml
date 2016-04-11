@@ -9,10 +9,10 @@
   
   <modules>
     <module>mkfs-dal</module>
-    <module>mkfs-login</module>
     <module>mkfs-service</module>
     <module>mkfs-web</module>
     <module>mkfs-common-utils</module>
+    <module>mkfs-authenticator</module>
   </modules>
   
   	<properties>

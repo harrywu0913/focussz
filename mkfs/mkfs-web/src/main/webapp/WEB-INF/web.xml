@@ -3,7 +3,7 @@
 	
 	<context-param>
 		<param-name>applicationName</param-name>
-		<param-value>mys</param-value>
+		<param-value>mkfs</param-value>
  	</context-param>
  	 <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -19,6 +19,9 @@
  	
  	<listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>com.focuszz.mkfs.web.listener.InitApplicationListener</listener-class>
     </listener>
     <listener>
         <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
@@ -57,6 +60,47 @@
     <servlet-mapping>
         <servlet-name>mkfs</servlet-name>
         <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>checkcode</servlet-name>
+        <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+        <init-param>
+            <param-name>kaptcha.border</param-name>
+            <param-value>no</param-value>
+        </init-param>
+        <init-param>
+            <param-name>kaptcha.image.width</param-name>
+            <param-value>90</param-value>
+        </init-param>
+        <init-param>
+            <param-name>kaptcha.image.height</param-name>
+            <param-value>34</param-value>
+        </init-param>
+        <init-param>
+            <param-name>kaptcha.textproducer.char.length</param-name> 
+            <param-value>4</param-value> 
+        </init-param>
+        <init-param>
+            <param-name>kaptcha.textproducer.font.size</param-name>
+            <param-value>24</param-value>
+        </init-param>
+        <init-param>
+            <param-name>kaptcha.textproducer.font.color</param-name>
+            <param-value>0,0,0</param-value>
+        </init-param>
+        <init-param> 
+            <param-name>kaptcha.noise.impl</param-name> 
+            <param-value>com.google.code.kaptcha.impl.NoNoise </param-value> 
+        </init-param>
+        <init-param> 
+            <param-name>kaptcha.obscurificator.impl</param-name> 
+            <param-value>com.google.code.kaptcha.impl.ShadowGimpy</param-value> 
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkcode</servlet-name>
+        <url-pattern>/checkcode.jpg</url-pattern>
     </servlet-mapping>
  	
 	<error-page>

@@ -8,35 +8,33 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   
-  <artifactId>mkfs-dal</artifactId>
-
+  <artifactId>mkfs-authenticator</artifactId>
+  <name>mkfs-authenticator</name>
+  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-    <dependency>
-		<groupId>com.focuszz</groupId>
-		<artifactId>mkfs-common-utils</artifactId>
+  	<dependency>
+		<groupId>commons-lang</groupId>
+		<artifactId>commons-lang</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>commons-collections</groupId>
+		<artifactId>commons-collections</artifactId>
+		<version>3.2.1</version>
 	</dependency>
   	<dependency>
-  		<groupId>org.springframework</groupId>
-		<artifactId>spring-jdbc</artifactId>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-core</artifactId>
+	</dependency>
+  	<dependency>
+		<groupId>dom4j</groupId>
+		<artifactId>dom4j</artifactId>
 	</dependency>
 	<dependency>
-		<groupId>org.mybatis</groupId>
-		<artifactId>mybatis</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>org.mybatis</groupId>
-		<artifactId>mybatis-spring</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>commons-dbcp</groupId>
-		<artifactId>commons-dbcp</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>mysql</groupId>
-		<artifactId>mysql-connector-java</artifactId>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-log4j12</artifactId>
 	</dependency>
     <dependency>
       <groupId>junit</groupId>

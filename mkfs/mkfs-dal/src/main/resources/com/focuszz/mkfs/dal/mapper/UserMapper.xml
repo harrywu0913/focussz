@@ -40,7 +40,7 @@
 			#{createId},
 			#{createTime},
 			#{updateId},
-			#{lastUpdateTime}
+			#{updateTime}
 		)
 	</insert>
 	

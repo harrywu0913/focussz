@@ -13,11 +13,7 @@
   <dependencies>
   	<dependency>
   		<groupId>com.focuszz</groupId>
-      	<artifactId>mkfs-login</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.focuszz</groupId>
-      	<artifactId>mkfs-service</artifactId>
+  		<artifactId>mkfs-service</artifactId>
   	</dependency>
   	<dependency>
 		<groupId>com.fasterxml.jackson.core</groupId>
@@ -26,6 +22,11 @@
 	<dependency>
 		<groupId>com.fasterxml.jackson.core</groupId>
 		<artifactId>jackson-databind</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>com.google.code.kaptcha</groupId>
+		<artifactId>kaptcha</artifactId>
+		<version>2.3.2</version>
 	</dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -81,6 +82,5 @@
 				<filtering>true</filtering>
 			</testResource>
 		</testResources>
-
 	</build>
 </project>
