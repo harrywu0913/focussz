@@ -1,40 +1,53 @@
-package com.focuszz.login.cookie;
+package com.foucszz.mkfs.common.utils.cookie;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.focuszz.login.codec.Base64Codec;
-import com.focuszz.login.codec.Codec;
+import com.focuszz.mkfs.common.utils.cookie.codec.Base64Codec;
+import com.focuszz.mkfs.common.utils.cookie.codec.Codec;
 
-public class CookieProcessor {
+public class CookieWrapper {
 
     public static final String DEFAULT_COOKIE_PATH = "/";
-    
+
+    private Cookie[]           cookies;
 
     private String             cookieDomain;
 
-    private String             cookieName;
-
-    private String             cookiePath          = DEFAULT_COOKIE_PATH;
+    private String             cookiePath;
 
     private Integer            cookieMaxAge;
 
-    private Codec              codec               = new Base64Codec();
+    private Codec              codec;
 
-    public CookieProcessor(String cookieName) {
-        this(cookieName, null);
+    public CookieWrapper(Cookie[] cookies) {
+        this(cookies, null);
     }
 
-    public CookieProcessor(String cookieName, String cookieDomain) {
-        this.cookieName = cookieName;
+    public CookieWrapper(Cookie[] cookies, String cookieDomain) {
+        this(cookies, cookieDomain, new Base64Codec());
+    }
+
+    public CookieWrapper(Cookie[] cookies, String cookieDomain, Codec codec) {
+        this(cookies, cookieDomain, DEFAULT_COOKIE_PATH, codec);
+    }
+
+    public CookieWrapper(Cookie[] cookies, String cookieDomain, String cookiePath, Codec codec) {
+        this(cookies, cookieDomain, DEFAULT_COOKIE_PATH, -1, codec);
+    }
+
+    public CookieWrapper(Cookie[] cookies, String cookieDomain, String cookiePath, int maxAge,
+                         Codec codec) {
+        this.cookies = cookies;
         this.cookieDomain = cookieDomain;
+        this.cookiePath = cookiePath;
+        this.cookieMaxAge = maxAge;
+        this.codec = codec;
     }
 
-    public String getCookieValue(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
+    public String getCookieValue(String cookieName) {
         if (cookies == null || cookies.length == 0) {
             return null;
         }
@@ -47,20 +60,25 @@ public class CookieProcessor {
         return null;
     }
 
-    public void addCookie(HttpServletResponse response, String value) {
+    public void addCookie(HttpServletResponse response, String cookieName, String value) {
+        addCookie(response, cookieName, value, null);
+    }
+
+    public void addCookie(HttpServletResponse response, String cookieName, String value,
+                          Integer maxAge) {
         Cookie cookie = new Cookie(cookieName, codec == null ? value : codec.encode(value));
         cookie.setPath(cookiePath);
         if (StringUtils.isNotBlank(cookieDomain)) {
             cookie.setDomain(cookieDomain);
         }
-        if (null != cookieMaxAge) {
+        if (null != maxAge) {
             cookie.setMaxAge(cookieMaxAge);
         }
         response.addCookie(cookie);
     }
 
-    public void removeCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie(getCookieName(), "");
+    public void removeCookie(HttpServletResponse response, String cookieName) {
+        Cookie cookie = new Cookie(cookieName, "");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
@@ -71,14 +89,6 @@ public class CookieProcessor {
 
     public void setCookieDomain(String cookieDomain) {
         this.cookieDomain = cookieDomain;
-    }
-
-    public String getCookieName() {
-        return cookieName;
-    }
-
-    public void setCookieName(String cookieName) {
-        this.cookieName = cookieName;
     }
 
     public String getCookiePath() {

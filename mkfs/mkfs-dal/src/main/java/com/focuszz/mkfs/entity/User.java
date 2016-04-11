@@ -14,7 +14,11 @@ public class User extends BaseEntity {
 
     private int    sex;
 
+    private String role;
+
     private String headPicPath;
+
+    private int    state;
 
     public String getUserName() {
         return userName;
@@ -62,5 +66,21 @@ public class User extends BaseEntity {
 
     public void setHeadPicPath(String headPicPath) {
         this.headPicPath = headPicPath;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }
