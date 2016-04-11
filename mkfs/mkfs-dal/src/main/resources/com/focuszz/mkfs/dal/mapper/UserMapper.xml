@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.focuszz.mkfs.dal.mapper.UserMapper">
+
+	<resultMap type="user" id="user_resultMap">
+		<result property="id" column="id" />
+		<result property="userName" column="user_name" />
+		<result property="mobilePhone" column="mobile_phone" />
+		<result property="email" column="email" />
+		<result property="birthday" column="birthday" />
+		<result property="sex" column="sex" />
+		<result property="state" column="state" />
+		<result property="createId" column="create_id" />
+		<result property="createTime" column="create_time" />
+		<result property="lastUpdateTime" column="update_time" />
+		<result property="updateId" column="update_id" />
+	</resultMap>
+
+	
+	<insert id="insert" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+		insert into user(
+			user_name,
+			mobile_phone,
+			email,
+			birthday,
+			sex,
+			state,
+			create_id,
+			create_time,
+			update_id,
+			update_time
+		)values(
+			#{userName},
+			#{mobilePhone},
+			#{email},
+			#{birthday},
+			#{sex},
+			#{state},
+			#{createId},
+			#{createTime},
+			#{updateId},
+			#{updateTime}
+		)
+	</insert>
+	
+	<select id="queryById" resultMap="user_resultMap">
+		SELECT
+			id,
+			user_name,
+			mobile_phone,
+			email,
+			birthday,
+			sex,
+			state,
+			create_id,
+			create_time,
+			update_id,
+			update_time
+		FROM
+			user
+		WHERE
+			id=#{id}
+	</select>
+	
+
+</mapper>

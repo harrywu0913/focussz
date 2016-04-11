@@ -8,10 +8,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 
 import com.focuszz.login.authenticator.config.AuthenticationDefinition;
+import com.foucszz.login.authenticator.registry.AuthenticationDefinitionRegistry;
 import com.foucszz.login.authenticator.registry.BeanDefinitionRegistry;
 
 public class XmlAuthenticationDefinitionReader implements AuthenticationDefinitionReader {
@@ -19,24 +22,35 @@ public class XmlAuthenticationDefinitionReader implements AuthenticationDefiniti
     private Logger                 logger           = LoggerFactory
         .getLogger(XmlAuthenticationDefinitionReader.class);
 
-    private static final String    LOGIN_ATTR       = "login";
+    private static final String    LOGIN_ATTR       = "needLogin";
     private static final String    ROLES_ATTR       = "roles";
-    private static final String    AUTH_SET_ELEMENT = "authenticationset";
-    private static final String    AUTH_ELEMENT     = "authentication";
+    private static final String    AUTH_SET_ELEMENT = "authorizationset";
+    private static final String    AUTH_ELEMENT     = "authorization";
     private static final String    URI_PREFIX_ATTR  = "uriPrefix";
     private static final String    URI_ATTR         = "uri";
+    private static final String    REGEX_ATTR       = "regex";
     public static final String     ROLE_ALL         = "all";
 
     public static final String     DELIMITER        = ",";
 
     private BeanDefinitionRegistry registry;
 
+    public XmlAuthenticationDefinitionReader() {
+        this(new AuthenticationDefinitionRegistry());
+    }
+
     public XmlAuthenticationDefinitionReader(BeanDefinitionRegistry registry) {
+        if (null == registry) {
+            throw new NullPointerException("registry can not be null");
+        }
         this.registry = registry;
     }
 
-    public void registerBeanDefinitions(Document doc) {
+    public void readBeanDefinitions(Resource resource) {
+        SAXReader reader = new SAXReader();
+        Document doc = null;
         try {
+            doc = reader.read(resource.getInputStream());
             final Element root = doc.getRootElement();
             final boolean defaultLogin = strToBoolean(
                 StringUtils.trimToEmpty(root.attributeValue(LOGIN_ATTR)));
@@ -76,7 +90,19 @@ public class XmlAuthenticationDefinitionReader implements AuthenticationDefiniti
         uri = uriPrefix + "";
         AuthenticationDefinition authDefinition = createAuthenticationDefinition(authElement,
             uriPrefix, parentDefinition);
-        registry.registerBean(uri, authDefinition);
+
+        if (validateAuthenticationDefinition(authDefinition)) {
+            if (authDefinition.isPatternUri()) {
+                registry.registerBean(authDefinition.getRegexUri(), authDefinition, true);
+            } else {
+                registry.registerBean(authDefinition.getUri(), authDefinition);
+            }
+        }
+    }
+
+    private boolean validateAuthenticationDefinition(AuthenticationDefinition authDefinition) {
+        return StringUtils.isNotBlank(authDefinition.getUri())
+               || StringUtils.isNotBlank(authDefinition.getRegexUri());
     }
 
     private AuthenticationDefinition createAuthenticationDefinition(Element element,
@@ -84,12 +110,14 @@ public class XmlAuthenticationDefinitionReader implements AuthenticationDefiniti
                                                                     AuthenticationDefinition parentDefinition) {
         String uri = element.attributeValue(URI_ATTR);
         String loginStr = element.attributeValue(LOGIN_ATTR);
+
         boolean login;
         if (StringUtils.isBlank(loginStr)) {
             login = parentDefinition.isLogin();
         } else {
             login = strToBoolean(loginStr);
         }
+
         String rolesStr = element.attributeValue(ROLES_ATTR);
         Set<String> roles;
         if (StringUtils.isBlank(rolesStr)) {
@@ -97,8 +125,17 @@ public class XmlAuthenticationDefinitionReader implements AuthenticationDefiniti
         } else {
             roles = strToSet(rolesStr, DELIMITER);
         }
-        uri = uriPrefix + uri;
-        return new AuthenticationDefinition(login, uri, roles);
+
+        if (StringUtils.isNotBlank(uri)) {
+            return new AuthenticationDefinition(login, uriPrefix + uri, roles);
+        } else {
+            String regexUri = element.attributeValue(REGEX_ATTR);
+            if (StringUtils.isBlank(regexUri)) {
+                regexUri = parentDefinition.getRegexUri();
+            }
+            return new AuthenticationDefinition(login, regexUri, roles, true);
+        }
+
     }
 
     private Set<String> strToSet(String str, String delimiter) {
@@ -124,4 +161,5 @@ public class XmlAuthenticationDefinitionReader implements AuthenticationDefiniti
     public void setRegistry(BeanDefinitionRegistry registry) {
         this.registry = registry;
     }
+
 }

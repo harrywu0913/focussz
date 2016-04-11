@@ -10,6 +10,10 @@ public class AuthenticationDefinition {
 
     private Set<String> roles;
 
+    private String      regexUri;
+
+    private boolean     patternUri;
+
     public AuthenticationDefinition() {
     }
 
@@ -18,9 +22,19 @@ public class AuthenticationDefinition {
     }
 
     public AuthenticationDefinition(boolean login, String uri, Set<String> roles) {
+        this(login, uri, roles, false);
+    }
+
+    public AuthenticationDefinition(boolean login, String uri, Set<String> roles,
+                                    boolean patternUri) {
         this.login = login;
-        this.uri = uri;
         this.roles = roles;
+        if (patternUri) {
+            regexUri = uri;
+        } else {
+            this.uri = uri;
+        }
+        this.patternUri = patternUri;
     }
 
     public boolean isLogin() {
@@ -46,4 +60,21 @@ public class AuthenticationDefinition {
     public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
+
+    public String getRegexUri() {
+        return regexUri;
+    }
+
+    public void setRegexUri(String regexUri) {
+        this.regexUri = regexUri;
+    }
+
+    public boolean isPatternUri() {
+        return patternUri;
+    }
+
+    public void setPatternUri(boolean patternUri) {
+        this.patternUri = patternUri;
+    }
+
 }

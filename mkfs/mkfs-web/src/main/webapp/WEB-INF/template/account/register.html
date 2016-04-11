@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		#parse("common/head.html")
+	</head>
+	<body>
+		#parse("common/header.html")
+		<div class="main_content">
+			<form action="/account/register.html" method="post" class="form" id="register_form">
+				<div class="form-item">
+					<label for="loginAccount" class="form-item-label"><span class="form-item-must">*</span>邮箱：</label>
+					<input type="text" name="loginAccount" class="form-input-text" id="loginAccount" placeholder="邮箱">
+				</div>
+				<div class="form-item">
+					<label for="passoword" class="form-item-label"><span class="form-item-must">*</span>密码：</label>
+					<input type="password" name="password" class="form-input-text" id="password" placeholder="密码">
+				</div>
+				<div class="form-item">
+					<label for="confirmPassword" class="form-item-label"><span class="form-item-must">*</span>确认密码：</label>
+					<input type="password" name="confirmPassword" class="form-input-text" id="confirmPassword" placeholder="确认密码">
+				</div>
+				<div class="form-item">
+					<label for="confirmPassoword" class="form-item-label"><span class="form-item-must">*</span>验证码：</label>
+					<input type="text" name="checkcode" id="checkcode" class="form-input-text form-item-checkcode"  placeholder="验证码" value="">
+					<img class="checkcode js-change-checkcode" src="/checkcode.jpg" alt="checkcode" id="checkcode-img"/>
+					<a href="javascript:void(0);" class="js-change-checkcode"><span style="padding-left: 3px;">看不清？换一张</span></a>
+				</div>
+				<div class="form-item">
+					<label class="form-item-label">&nbsp;</label>
+					<button  type="submit" class="form-item-btn" id="subBtn">立即注册</button>
+				</div>
+			</form>
+		</div>
+		#parse("common/footer.html")		
+		<script type="text/javascript" src="$!{form.staticResourceDomain}/js/lib/jquery.validate.min.js"></script>
+		<script type="text/javascript" src="$!{form.staticResourceDomain}/js/custom/register.js"></script>
+	</body>
+</html>
+		

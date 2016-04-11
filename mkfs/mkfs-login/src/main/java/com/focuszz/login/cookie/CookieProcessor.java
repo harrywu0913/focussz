@@ -12,6 +12,7 @@ import com.focuszz.login.codec.Codec;
 public class CookieProcessor {
 
     public static final String DEFAULT_COOKIE_PATH = "/";
+    
 
     private String             cookieDomain;
 

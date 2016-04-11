@@ -1,5 +1,4 @@
 package com.focuszz.mkfs.dal.mapper;
 
-public interface UserMapper {
-
+public interface UserMapper extends BaseMapper {
 }

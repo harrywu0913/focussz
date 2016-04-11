@@ -2,6 +2,8 @@ package com.focuszz.login.authenticator;
 
 public interface Authenticator {
 
-    public boolean permit(String role, String url);
+    public boolean authenticate(String url, String role);
+
+    public boolean authenticate(String url, boolean logon);
 
 }
